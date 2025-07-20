@@ -2,10 +2,12 @@
 *.ps
 *.midi
 *.mid
+*.mp3
 *.log
 *~
 *.xml
 *.ly
+-.tmp*
 # Adding .txt files to enable requirements.txt; can make more specific later
 # *.txt
 .python-version
