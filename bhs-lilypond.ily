@@ -269,16 +269,17 @@ TODO: Honestly should combine functionality between this and generate-perf-notes
   markup-system-spacing.padding = #4 % ensure there is a nice amount of space below the title markup
   % page-breaking-system-system-spacing.basic-distance = #5 % trick the page breaker into thinking there needs to be a sufficiently large gap between systems, such that the first page will not have 5 systems on it
 
-  % TODO: Times New Roman on Macs is currently broken: N becomes a different glyph (I with dot underneath)
+  % Times New Roman on Macs is currently broken: N becomes a different glyph (I with dot underneath)
   % References:
   % https://lists.gnu.org/archive/html/lilypond-user/2022-12/msg00349.html
   % https://gitlab.com/lilypond/lilypond/-/issues/6508
   % https://discussions.apple.com/thread/254519584
-  % In the short term, disable Times New Roman if system is detected as Mac (Darwin). The default font is not great for lyrics somehow, but at least it displays characters correctly.
+  % In the short term, use Times instead of Times New Roman. Times is from the Linotype lineage, which is subtly different, but it will be basically impossible to tell.
+  % In the long term, consider bundling an open source variant of Times New Roman to ensure cross-platform compatibility.
   #(define fonts
     (if (string-ci= (utsname:sysname (uname)) "Darwin")
       (set-global-fonts
-        #:roman "LilyPond Serif"
+        #:roman "Times"
         #:sans "Arial"
         #:factor (/ staff-height pt 20) ; unnecessary if the staff size is default
       )
