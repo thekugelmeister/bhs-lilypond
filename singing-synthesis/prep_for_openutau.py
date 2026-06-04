@@ -39,6 +39,8 @@ def openutauify(flat_track: mido.MidiTrack) -> mido.MidiTrack:
     for message in flat_track:
         match message:
             case mido.MetaMessage(type='lyrics'):
+                if not message.text:
+                    raise RuntimeError("For synthesis, all voices must have lyrics")
                 # Ensure first lyric starts with a vowel
                 if not past_first_lyric:
                     if not message.text[0].lower() in 'aeiou':

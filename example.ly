@@ -402,6 +402,7 @@ BassLyrics = \lyricmode {
 
 %% Synthesis lyrics
 %% TODO: Lyrics were changed for compatibility with legacy synthesis scheme; consider updating to match new scheme
+%% TODO: Synthesizing this file crashes OpenUtau right now.
 % TenorLyrics = \lyricmode {
 %   oo __
   

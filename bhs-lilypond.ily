@@ -276,19 +276,24 @@ TODO: Honestly should combine functionality between this and generate-perf-notes
   % https://discussions.apple.com/thread/254519584
   % In the short term, use Times instead of Times New Roman. Times is from the Linotype lineage, which is subtly different, but it will be basically impossible to tell.
   % In the long term, consider bundling an open source variant of Times New Roman to ensure cross-platform compatibility.
-  #(define fonts
-    (if (string-ci= (utsname:sysname (uname)) "Darwin")
-      (set-global-fonts
-        #:roman "Times"
-        #:sans "Arial"
-        #:factor (/ staff-height pt 20) ; unnecessary if the staff size is default
-      )
-      (set-global-fonts
-        #:roman "Times New Roman,"
-        #:sans "Arial"
-        #:factor (/ staff-height pt 20) ; unnecessary if the staff size is default
-      )))
-  
+  % #(define fonts
+  %   (if (string-ci= (utsname:sysname (uname)) "Darwin")
+  %     (set-global-fonts
+  %       #:roman "Times"
+  %       #:sans "Arial"
+  %       #:factor (/ staff-height pt 20) ; unnecessary if the staff size is default
+  %     )
+  %     (set-global-fonts
+  %       #:roman "Times New Roman,"
+  %       #:sans "Arial"
+  %       #:factor (/ staff-height pt 20) ; unnecessary if the staff size is default
+  %     )))
+  % #(define property-defaults.fonts.serif "Times")
+  property-defaults.fonts.serif = #(if (string-ci= (utsname:sysname (uname)) "Darwin") "Times" "Times New Roman")
+  property-defaults.fonts.sans = "Arial"
+  % TODO: This paper variable adjusts the text size for lyrics, etc. It is not clear to me what the absolute value of this should be. However, the lilypond default seems to be fine.
+  % text-font-size = 12
+
   % Reference for the following markups: https://lilypond.org/doc/Documentation/notation/custom-titles-headers-and-footers
   bookTitleMarkup = \markup {
     \column {
@@ -480,11 +485,13 @@ BHSBarSandwich =
 % Automatically wraps each music definition in a BHSBarSandwich (blank bar line and closing bar line).
 % This is done by redefining each music definition as itself surrounded by the sandwich, at the module level.
 % This implementation is required thanks to the utilization of the builtin LilyPond vocal-tkit.ly \make-N-voice-vocal-staff functionality, which automatically retrieves music definitions based on voice names.
+% Note that all-music-names is automatically populated as defined in base-tkit.ly
 % TODO: This appears to be functional, but is clunky. Are there any strange side effects? Are there other ways to do this? Maybe this is a convincing argument for not relying on the builtin functionality, or at least copying it over and modifying it.
+% TODO: This should really only operate on the voices, not the staves
 #(for-each 
   (lambda (name)
     (module-define! (current-module)
-     (string->symbol name) (BHSBarSandwich (get-id name))))
+     (string->symbol name) (BHSBarSandwich (tkit-lookup name))))
   all-music-names)
 
                                 % TODO: Always having this be a chorus staff is convenient for the BHS usecase, but isn't necessarily the desired option for all cases. For example, with a solo 5th part, it might be nice for the solo line to be a member of its own staff. I think this would require a new outer-most class for score specification that defines what type of staff you want. Even better would be a version of generate-staff-definition for choir-staff-spec objects, so this line would barely change.
@@ -502,26 +509,21 @@ BHSLyStaff = << \new ChoirStaff << #(make-simultaneous-music (map generate-staff
 % }
 
 % TODO: The chord display functionality could be useful in the future; should it be reenabled?
+% #(if have-music
+%      #{ << \Chords \BHSLyStaff >> #}
+%      #{ { } #} )
 \score {
-  \keepWithTag #'print
-  % #(if have-music
-  %      #{ << \Chords \BHSLyStaff >> #}
-  %      #{ { } #} )
-  #(if have-music
-       #{ << \BHSLyStaff >> #}
-       #{ { } #} )
+  \keepWithTag #'print << 
+    \BHSLyStaff 
+  >>
   \layout { $(if Layout Layout) }
 }
 
 %% To avoid note collisions for multiple voices voices on one staff, assign the midi performer to the Voice context.
 \score {
-  \keepWithTag #'play
-  % #(if have-music
-  %      #{ << \Chords \BHSLyStaff >> #}
-  %      #{ { } #} )
-  #(if have-music
-       #{ << \BHSLyStaff >> #}
-       #{ { } #} )
+  \keepWithTag #'play << 
+    \BHSLyStaff 
+  >>
   \midi {
     \context {
       \Staff
