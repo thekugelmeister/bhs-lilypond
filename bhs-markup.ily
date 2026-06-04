@@ -99,6 +99,7 @@ optionalNotes =
    x))
 %}
 
+% TODO: Right now, (\set autoExtenders = ##t) is broken when \skips is used. Is that because of a mistake I've made?
 %{ skips
 Insert a given number of lyric skips, making it easier and more concise to add lyrics to harmony parts
 
@@ -181,3 +182,20 @@ spoken =
   (parser location music)
   (ly:music?)
   #{ \override NoteHead.style = #'cross $music \revert NoteHead.style #})
+
+%{ keychange
+Format a keychange correctly, placing double barlines and adding courtesey key signatures where necessary. Use as a direct replacement for the standard \key music function within scores. Works mid-measure.
+
+@Section B.4.b
+Indicate a change in key by placing a double bar line prior to the indication of the new key. If a key change occurs at the start of a new system, place a double bar line followed by a courtesy key signature at the end of the preceding system.
+
+Example usage:
+  LeadMusic = \relative c' {
+    f4 f4 \keychange e \major e8 e8 e4 |
+  }
+%}
+keychange =
+#(define-music-function 
+  (tonic pitch-alist)
+  ((ly:pitch? '()) (number-pair-list? '()))
+  #{ \section \key $tonic $pitch-alist #})

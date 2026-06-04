@@ -230,15 +230,11 @@ TODO: Honestly should combine functionality between this and generate-perf-notes
 %% Place optional passages of songs on a new system following the conclusion of the song. Use the label Optional tag, Optional key change, etc. as needed using 12-point fixed size Times New Roman Italic type.
                                 % TODO: Optional tag/etc. spec is currently unimplemented
 
-%%% @Section B.4.b
-%% Indicate a change in key by placing a double bar line prior to the indication of the new key. If a key change occurs at the start of a new system, place a double bar line followed by a courtesy key signature at the end of the preceding system.
-                                % TODO: Key change bar line spec is currently unimplemented
-
 %%% @Section B.5.b
 %% Indicate a change in meter by placing a double bar line prior to the indication of the new meter.
 %%% @Section B.5.c
 %% Indicate a meter change that preserves the time value of the basic beat
-                                % TODO: Time signature change spec is currently unimplemented
+                                % TODO: Time signature change spec is currently unimplemented, but should be easy to implement based off of the updated keychange function.
 #(debug-error-print "changing paper settings...")
 \paper {
   annotate-spacing = #BHSDebug
