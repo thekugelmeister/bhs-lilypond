@@ -276,19 +276,6 @@ TODO: Honestly should combine functionality between this and generate-perf-notes
   % https://discussions.apple.com/thread/254519584
   % In the short term, use Times instead of Times New Roman. Times is from the Linotype lineage, which is subtly different, but it will be basically impossible to tell.
   % In the long term, consider bundling an open source variant of Times New Roman to ensure cross-platform compatibility.
-  % #(define fonts
-  %   (if (string-ci= (utsname:sysname (uname)) "Darwin")
-  %     (set-global-fonts
-  %       #:roman "Times"
-  %       #:sans "Arial"
-  %       #:factor (/ staff-height pt 20) ; unnecessary if the staff size is default
-  %     )
-  %     (set-global-fonts
-  %       #:roman "Times New Roman,"
-  %       #:sans "Arial"
-  %       #:factor (/ staff-height pt 20) ; unnecessary if the staff size is default
-  %     )))
-  % #(define property-defaults.fonts.serif "Times")
   property-defaults.fonts.serif = #(if (string-ci= (utsname:sysname (uname)) "Darwin") "Times" "Times New Roman")
   property-defaults.fonts.sans = "Arial"
   % TODO: This paper variable adjusts the text size for lyrics, etc. It is not clear to me what the absolute value of this should be. However, the lilypond default seems to be fine.

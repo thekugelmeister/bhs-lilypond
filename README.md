@@ -9,7 +9,7 @@ Creating high-quality, beautiful, easy-to-read barbershop music notation can be 
 ## Requirements
 | Software      | Version |
 |---------------|---------|
-| [LilyPond][3] | 2.24+   |
+| [LilyPond][3] | 2.26   |
 
 ## Usage
 

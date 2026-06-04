@@ -1,4 +1,4 @@
-\version "2.24"
+\version "2.26"
 \include "bhs-markup.ily"
 
 \header {
